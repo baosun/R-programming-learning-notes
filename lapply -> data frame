@@ -1,0 +1,54 @@
+This is to document how to get the nth row of each group in a column, and return a data frame listing all the nth rows of each group in the column. The tie is broking by using the 3rd column. The returned data frame should show only needed data in the more readable manner.
+
+## create a data frame
+> set.seed(1)
+> a <- data.frame("foo" = rnorm(12), "boo" = c("A","B","C"), "bar" = c("1","2","3","4"))
+> a
+          foo boo bar
+1  -0.6264538   A   1
+2   0.1836433   B   2
+3  -0.8356286   C   3
+4   1.5952808   A   4
+5   0.3295078   B   1
+6  -0.8204684   C   2
+7   0.4874291   A   3
+8   0.7383247   B   4
+9   0.5757814   C   1
+10 -0.3053884   A   2
+11  1.5117812   B   3
+12  0.3898432   C   4
+
+## arrange the rows based on the orders first in column "boo", then "bar", then "foo"
+> order <- a[order(a$boo, as.numeric(a$bar), a$foo), ]
+> order
+          foo boo bar
+1  -0.6264538   A   1
+10 -0.3053884   A   2
+7   0.4874291   A   3
+4   1.5952808   A   4
+5   0.3295078   B   1
+2   0.1836433   B   2
+11  1.5117812   B   3
+8   0.7383247   B   4
+9   0.5757814   C   1
+6  -0.8204684   C   2
+3  -0.8356286   C   3
+12  0.3898432   C   4
+
+## to return nth row in each category of column "boo"
+> split <- split(order, order$boo)
+> num = 3                                               ## to return the 3rd row of each category in column "boo"
+> select <- lapply(split, FUN = function(x) x[num, ])   ## lapply return a list, not a data frame
+> organize <- do.call(rbind,select)                     ## this returns a data frame, but not exactly what I want
+> organize                                      
+         foo boo bar
+A  0.4874291   A   3
+B  1.5117812   B   3
+C -0.8356286   C   3
+
+> dataFrame <- data.frame("group" = organize$boo, "value" = organize$foo)
+> dataFrame
+  group      value
+1     A  0.4874291
+2     B  1.5117812
+3     C -0.8356286
