@@ -1,4 +1,6 @@
-This is to document how to get the nth row of each group in a column, and return a data frame listing all the nth rows of each group in the column. The tie is broking by using the 3rd column. The returned data frame should show only needed data in the more readable manner.
+This is to document how to get the nth row of each group in a column, and return a data frame listing all the nth rows of 
+each group in the column. The tie is broking by using the 3rd column. The returned data frame should show only needed data 
+in the more readable manner.
 
 ## create a data frame
 > set.seed(1)
